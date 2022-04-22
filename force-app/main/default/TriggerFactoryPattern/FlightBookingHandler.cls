@@ -23,6 +23,9 @@ public with sharing class FlightBookingHandler implements ITrigger{
 
     public void beforeInsert(SObject sObj) {
 
+        Flight_Bookings__c instance = (Flight_Bookings__c) sObj;
+            instance.Account__c = instance.Contact__r.Account.Id;
+
     }
 
     public void beforeUpdate(SObject oldSobj, SObject sObj) {
