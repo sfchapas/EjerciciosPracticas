@@ -28,15 +28,34 @@ public with sharing class ej2_4_PassengerAutofillContactTest {
 
         Passenger__c passenger = new Passenger__c(
                 Name = 'Test ej2.3',
-                ID_Card__c = '47559507S',
                 Booking__c = fb.Id);
 
         return passenger;
     }
 
-    @isTest static void test(){
-        //insertar contacto con dni
-        //insertar passenger con el mismo dni
-        //comprobar que passenger.contact tiene la relacin con el contacto anterior
+    @isTest static void TestInsertPassengerAutofillContact(){
+        Passenger__c passenger =  ej2_4_PassengerAutofillContactTest.mock();
+        passenger.ID_Card__c = '47559507S';
+
+        Test.startTest();
+        Database.SaveResult result = Database.insert(passenger, false);
+        Test.stopTest();
+
+        System.assert(result.isSuccess(), 'El test se ejecutó correctamente');
+        
+    }
+
+    @isTest static void TestUpdatePassengerAutofillContact(){
+        Passenger__c passenger =  ej2_4_PassengerAutofillContactTest.mock();
+        insert passenger;
+
+        passenger.ID_Card__c = '47559507S';
+
+        Test.startTest();
+        Database.SaveResult result = Database.update(passenger, false);
+        Test.stopTest();
+
+        System.assert(result.isSuccess(), 'El test se ejecutó correctamente');
+
     }
 }
