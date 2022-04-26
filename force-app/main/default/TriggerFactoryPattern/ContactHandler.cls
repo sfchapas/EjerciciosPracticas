@@ -23,16 +23,20 @@ public with sharing class ContactHandler implements ITrigger{
 
     public void beforeInsert(SObject sObj) {
         Contact contact = (Contact) sObj;
-        if(!Utils.validarNIF(contact.NIF__c)){
-            contact.addError(contact.NIF__c +' Invalid NIF (ID Card)');
-        }
+        if (contact.NIF__c != null) {
+            if(!Utils.validarNIF(contact.NIF__c)){
+                contact.addError(contact.NIF__c +' Invalid NIF (ID Card)');
+            }
+        }   
     }
 
     public void beforeUpdate(SObject oldSobj, SObject sObj) {
         Contact contact = (Contact) sObj;
-        if(!Utils.validarNIF(contact.NIF__c)){
-            contact.addError(contact.NIF__c +' Invalid NIF');
-        }
+        if (contact.NIF__c != null) {
+            if(!Utils.validarNIF(contact.NIF__c)){
+                contact.addError(contact.NIF__c +' Invalid NIF (ID Card)');
+            }
+        } 
     }
 
     public void beforeDelete(SObject sObj) {

@@ -32,7 +32,7 @@ public with sharing class FlightBookingHandler implements ITrigger{
     public void beforeInsert(SObject sObj) {
 
         Flight_Bookings__c instance = (Flight_Bookings__c) sObj;
-        if ((instance.Account__c == null || instance.Account__c == '') && (instance.Contact__c != null || instance.Contact__c != '')) {
+        if (instance.Account__c == null && instance.Contact__c != null) {
             Contact ctc = contactsAssociates.get(instance.Contact__c);
             instance.Account__c = ctc.AccountId;
         }

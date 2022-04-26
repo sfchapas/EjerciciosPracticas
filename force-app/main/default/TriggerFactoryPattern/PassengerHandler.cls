@@ -25,9 +25,13 @@ public with sharing class PassengerHandler implements ITrigger{
     public void beforeInsert(SObject sObj) {
         Passenger__c passenger = (Passenger__c) sObj;
 
-        if(!Utils.validarNIF(passenger.ID_Card__c)){
-            passenger.addError(passenger.ID_Card__c +' Invalid NIF (ID Card)');
+        //Comprobar antes que el passenger tiene nif
+        if(passenger.ID_Card__c!=null){
+            if(!Utils.validarNIF(passenger.ID_Card__c)){
+                passenger.addError(passenger.ID_Card__c +' Invalid NIF (ID Card)');
+            }
         }
+        
 
         if(passenger.Contact__c == null || passenger.Contact__c == ''){
             for (Contact ctc : contactsWithNifs) {
@@ -40,8 +44,11 @@ public with sharing class PassengerHandler implements ITrigger{
 
     public void beforeUpdate(SObject oldSobj, SObject sObj) {
         Passenger__c passenger = (Passenger__c) sObj;
-        if(!Utils.validarNIF(passenger.ID_Card__c)){
-            passenger.addError(passenger.ID_Card__c +' Invalid NIF (ID Card)');
+
+        if(passenger.ID_Card__c!=null){
+            if(!Utils.validarNIF(passenger.ID_Card__c)){
+                passenger.addError(passenger.ID_Card__c +' Invalid NIF (ID Card)');
+            }
         }
 
         if(passenger.Contact__c == null || passenger.Contact__c == ''){
