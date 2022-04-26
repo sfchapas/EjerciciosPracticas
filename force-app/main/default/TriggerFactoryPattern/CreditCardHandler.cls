@@ -6,7 +6,7 @@
 public with sharing class CreditCardHandler implements ITrigger{
 
     // Var declaration
-        User userAccentureTest = [SELECT Id, Name FROM User WHERE Name = 'Accenture TEST'];
+    User userAccentureTest;
     // Constant declaration
 
     // Builder
@@ -18,7 +18,7 @@ public with sharing class CreditCardHandler implements ITrigger{
     * Use this to cache any data required into maps prior execution of the trigger.
     */
     public void bulkBefore() {
-
+        userAccentureTest = [SELECT Id, Name FROM User WHERE Name = 'Accenture TEST'];
     }
 
     public void beforeInsert(SObject sObj) {

@@ -6,7 +6,8 @@
 public with sharing class FlightBookingHandler implements ITrigger{
 
     // Var declaration
-
+    List<Id> contactsId = new List<Id>();
+    Map<Id,Contact> contactsAssociates;
     // Constant declaration
 
     // Builder
@@ -19,13 +20,21 @@ public with sharing class FlightBookingHandler implements ITrigger{
     */
     public void bulkBefore() {
 
+        for (SObject flightBooking : Trigger.new) {
+            contactsId.add(((Flight_Bookings__c)flightBooking).Contact__c);
+        }
+        if (contactsId.size() > 0) {
+            contactsAssociates = new Map<Id,Contact>([SELECT Id, Name, AccountId FROM Contact WHERE Id in :contactsId]);
+        }
+
     }
 
     public void beforeInsert(SObject sObj) {
 
         Flight_Bookings__c instance = (Flight_Bookings__c) sObj;
         if ((instance.Account__c == null || instance.Account__c == '') && (instance.Contact__c != null || instance.Contact__c != '')) {
-            instance.Account__c = instance.Contact__r.Account.Id;
+            Contact ctc = contactsAssociates.get(instance.Contact__c);
+            instance.Account__c = ctc.AccountId;
         }
 
     }
