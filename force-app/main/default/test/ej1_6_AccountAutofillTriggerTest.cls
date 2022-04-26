@@ -9,10 +9,14 @@ public with sharing class ej1_6_AccountAutofillTriggerTest {
     
     @isTest static void TestFlightBookingWithoutAccount(){
 
-        List<Contact> ctcs = [SELECT Id, Name, AccountId FROM Contact Limit 10];
-        Account acct = new Account();
+        Account acct = new Account(Name ='Test ej1.6');
+        insert acct;
 
-        acct = [SELECT Id FROM Account WHERE Id = :ctcs.get(0).AccountId];    
+        Contact ctc = new Contact (
+            LastName='Test ej1.6', 
+            NIF__c='47559507S',
+            AccountId = acct.Id);
+        insert ctc;
         
 
         Flight_Bookings__c fb = new Flight_Bookings__c(
@@ -20,7 +24,7 @@ public with sharing class ej1_6_AccountAutofillTriggerTest {
             Departure_Date__c = Date.today() +1,
             Origin__c = 'Madrid',
             Destination__c='Roma',
-            Contact__c = ctcs.get(0).Id);
+            Contact__c = ctc.Id);
 
         Test.startTest();
         Database.SaveResult result = Database.insert(fb, false);
