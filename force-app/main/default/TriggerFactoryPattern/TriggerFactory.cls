@@ -97,13 +97,14 @@ public with sharing class TriggerFactory {
 			return new PassengerHandler();
 		}
 		
+		
         if (soType == Contact.sObjectType) {
 			return new ContactHandler();
 		}
-		/*
-        if (soType == TimeRecordControl__c.sObjectType) {
-			return new TimeRecordControlTriggerHandler();
-		}*/
+		
+        if (soType == Credit_Card__c.sObjectType) {
+			return new CreditCardHandler();
+		}
 
 		return null;
 	}
