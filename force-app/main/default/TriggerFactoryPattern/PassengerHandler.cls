@@ -33,7 +33,7 @@ public with sharing class PassengerHandler implements ITrigger{
         }
         
 
-        if(passenger.Contact__c == null || passenger.Contact__c == ''){
+        if(passenger.Contact__c == null){
             for (Contact ctc : contactsWithNifs) {
                 if(passenger.ID_Card__c == ctc.NIF__c){
                     passenger.Contact__c = ctc.Id;

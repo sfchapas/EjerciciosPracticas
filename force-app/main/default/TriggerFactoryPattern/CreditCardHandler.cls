@@ -56,20 +56,28 @@ public with sharing class CreditCardHandler implements ITrigger{
     public void afterInsert(SObject sObj) {
         
         Credit_Card__c creditCard = (Credit_Card__c) sObj;
-        System.debug('ENTRAAAAAAA');
-        //Probado y hasta aquí entra pero no funciona
+        //No comprobamos si es premium porque los contactos que hemos recogido en la
+        //consulta son los premium
         if (creditCard.OwnerId != userAccentureTest.Id) {
             Contact ctc = contactsAssociatedPremium.get(creditCard.Contact__c);
-            if (ctc.Premium__c) {
-                Opportunity opp = new Opportunity();
+            Opportunity opp = new Opportunity();
+            //En layout los campos son required, el if es por si se inserta por código, pruebas...
+            if (creditCard.Expiration_Month__c != null && creditCard.Expiration_Year__c != null){
                 //Year, Month, Day
-                Date fecha = Date.newInstance(2022, 8, 20);
+                Date fecha = Date.newInstance((Integer)creditCard.Expiration_Year__c, (Integer)creditCard.Expiration_Month__c, 01);
                 opp.CloseDate = fecha;
-                opp.StageName = 'Not started';
-                opp.AccountId = ctc.AccountId;
-                opp.Name = ctc.Name;
-                listOpportunities.add(opp);
+            }else {
+                //Si no tuviera fecha la fecha de cierre de un mes
+                opp.CloseDate = Date.today() + 30;
             }
+            opp.StageName = 'Not started';
+            if (creditCard.Contact__c != null) {
+                opp.AccountId = ctc.AccountId;
+                opp.Name = ctc.Name;    
+            }else{
+                opp.Name = 'Opp Credit Card Premium';
+            }
+            listOpportunities.add(opp);
         }
     }
 
@@ -86,7 +94,10 @@ public with sharing class CreditCardHandler implements ITrigger{
     * Use this method to accomplish any final operations such as creation or updates of other records.
     */
     public void andFinally() {
-        insert listOpportunities;
+        if (listOpportunities.size()>0) {
+            insert listOpportunities;    
+        }
+        
     }
 
     // Other methods
