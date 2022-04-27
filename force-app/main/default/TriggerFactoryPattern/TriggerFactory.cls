@@ -106,6 +106,10 @@ public with sharing class TriggerFactory {
 			return new CreditCardHandler();
 		}
 
+		if (soType == Task.sObjectType) {
+			return new TaskHandler();
+		}
+
 		return null;
 	}
 }
